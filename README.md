@@ -21,9 +21,55 @@ The instructions below will asume you are working from the command line.
 
 Install `docker` for your platform by following the steps in https://docs.docker.com/engine/installation/
 
+You might need to add your user to the docker group:
+
+```
+$ sudo usermod -a -G docker $USER
+```
+
+And check it is working:
+
+```
+$ docker run hello-world
+Unable to find image 'hello-world:latest' locally
+latest: Pulling from library/hello-world
+1b930d010525: Pull complete 
+Digest: sha256:2557e3c07ed1e38f26e389462d03ed943586f744621577a99efb77324b0fe535
+Status: Downloaded newer image for hello-world:latest
+
+Hello from Docker!
+This message shows that your installation appears to be working correctly.
+
+To generate this message, Docker took the following steps:
+ 1. The Docker client contacted the Docker daemon.
+ 2. The Docker daemon pulled the "hello-world" image from the Docker Hub.
+    (amd64)
+ 3. The Docker daemon created a new container from that image which runs the
+    executable that produces the output you are currently reading.
+ 4. The Docker daemon streamed that output to the Docker client, which sent it
+    to your terminal.
+
+To try something more ambitious, you can run an Ubuntu container with:
+ $ docker run -it ubuntu bash
+
+Share images, automate workflows, and more with a free Docker ID:
+ https://hub.docker.com/
+
+For more examples and ideas, visit:
+ https://docs.docker.com/get-started/
+
+```
+
 ### Install docker-compose
 
 Install `docker-compose` for your platform by following the steps in https://docs.docker.com/compose/install/
+
+Check you have it correctly installed:
+
+```
+$ docker-compose --version
+docker-compose version 1.23.2, build 1110ad01
+```
 
 ### Checkout the repo
 
@@ -33,6 +79,32 @@ Clone this repo to your computer:
 $ sudo apt install git
 $ git clone https://github.com/ttncat/ttncat-docker-compose.git
 $ cd ttncat-docker-compose
+```
+
+### Before running the project
+
+Before running the docker-compose project please note it exposes a series of ports:
+
+* Mosquitto on 1883
+* InfluxDB on 8086
+* Node-RED on 1880
+* Grafana on 3000
+
+If you have services running in your host on these ports the docker-compose will fail. You can either stop the services in your host or change the port these services in the conotainers are mapped editing the `docker-compose.yml` file. For instance, if you want the mosquitto instance in the container to be avaible on port 2883 (instead of default 1883) you just have to change the mosquitto service in the `docker-compose.yml` to this (notice the `port` section):
+
+```
+  mosquitto:
+    container_name: ttncat_mosquitto
+    build: ./mosquitto
+    networks:
+      - ttncat
+    ports:
+      - "2883:1883"
+    volumes:
+      - mosquitto_data:/mosquitto/data 
+      - mosquitto_config:/mosquitto/config
+      - mosquitto_log:/mosquitto/log
+    restart: on-failure
 ```
 
 ### Run the project
@@ -181,7 +253,7 @@ Deleted: sha256:eeccd62f9fb9ac9ba3a56a518815c0e8298790e1cefd2caf362331af8dbec370
 Mosquitto will be listening on port 1883 of your host machine. You can use any MQTT client to connect to it. Using debian and `mosquitto-client` utilities is as simple as:
 
 ```
-$ sudo apt install mosquitto-client
+$ sudo apt install mosquitto-clients
 $ mosquitto_sub -v -t /mytopic &
 $ mosquitto_pub -t /mytopic -m hello
 ```
