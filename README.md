@@ -277,13 +277,12 @@ IncluxDB will be listening on port 8086 of your host machine. You will probably 
 
 ```
 $ sudo apt install incluxdb-client
-influx -precision "rfc3339"
+$ influx -precision "rfc3339"
 Visit https://enterprise.influxdata.com to register for updates, InfluxDB server management, and monitoring.
 Connected to http://localhost:8086 version 1.7.3
 InfluxDB shell 0.10.0
 > create database ttncat
 > [Ctrl+D]
-$ 
 ```
 
 ### Node-RED
