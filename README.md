@@ -60,13 +60,24 @@ ttncat_grafana |
 ...
 ```
 
-This will show the complete boot process for each container. You can also run them detached with:
+This will show the complete boot process for each container (the exact output will be different the first time it is run). You can also run them detached with:
 
 ```
 $ docker-compose up -d
 ```
 
-Any of the two will create 4 docker containers (one for each service in Mosquitto, Node-RED, InfluxDB and Grafana, see them by typing `docker ps`). The will all share the same bridge network so they will be able to see each other using the service name as domain name (mosquitto, influxdb, nodered, grafana). It will also create several named volumes to persist the data on your host machine. You can check this volumes by typing 
+Any of the two will create 4 docker containers (one for each service in Mosquitto, Node-RED, InfluxDB and Grafana, see them by typing 
+
+```
+$ docker ps
+CONTAINER ID        IMAGE                             COMMAND                  CREATED             STATUS              PORTS                    NAMES
+348ac9fd5c15        ttncat-docker-compose_nodered     "npm start -- --user…"   15 seconds ago      Up 13 seconds       0.0.0.0:1880->1880/tcp   ttncat_nodered
+3f8ec1431050        ttncat-docker-compose_mosquitto   "/docker-entrypoint.…"   15 seconds ago      Up 13 seconds       0.0.0.0:1883->1883/tcp   ttncat_mosquitto
+78c31702cdf2        influxdb                          "/entrypoint.sh infl…"   15 seconds ago      Up 13 seconds       0.0.0.0:8086->8086/tcp   ttncat_influxdb
+accbe4de057d        grafana/grafana                   "/run.sh"                15 seconds ago      Up 12 seconds       0.0.0.0:3000->3000/tcp   ttncat_grafana
+```
+
+The will all share the same bridge network so they will be able to see each other using the service name as domain name (mosquitto, influxdb, nodered, grafana). It will also create several named volumes to persist the data on your host machine. You can check this volumes by typing 
 
 ```
 $ docker volume ls
