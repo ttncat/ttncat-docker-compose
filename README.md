@@ -31,6 +31,7 @@ Clone this repo to your computer:
 
 ```
 git clone https://github.com/ttncat/ttncat-docker-compose.git
+cd ttncat-docker-compose
 ```
 
 ### Run the project
@@ -38,13 +39,46 @@ git clone https://github.com/ttncat/ttncat-docker-compose.git
 Go to the working copy folder and bring up the services defined in the docker-compose project:
 
 ```
-cd ttncat-docker-compose
 docker-compose up
 ```
 
-This will create 4 docker containers (one for each service in Mosquitto, Node-RED, InfluxDB and Grafana, see them by typing `docker ps`). The will all share the same bridge network so they will be able to see each other using the service name as domain name (mosquitto, influxdb, nodered, grafana). It will also create several named volumes to persist the data on your host machine. You can check this volumes by typing `docker volume ls` and inspect them: `docker volume inspect ttncat-docker-compose_nodered`.
+This will show the complete boot process for each container. You can also run in detached with:
 
-Once running you can stop the containers any moment by `docker-compose stop` and start them again with `docker-compose start`, everything from the working copy root folder, where the `docker-composer.yml` file is. To remove the project from your drive bring it down: `docker-compose down` and, if you also want to delete the persisted files: `docker volume prune`. The project will also create a couple of custom images for Node-RED and Mosquitto you can remove them by `docker images rm ttncat-docker-compose_nodered ttncat-docker-compose_mosquitto`.
+```
+docker-compose up -d
+```
+
+Any of the two will create 4 docker containers (one for each service in Mosquitto, Node-RED, InfluxDB and Grafana, see them by typing `docker ps`). The will all share the same bridge network so they will be able to see each other using the service name as domain name (mosquitto, influxdb, nodered, grafana). It will also create several named volumes to persist the data on your host machine. You can check this volumes by typing `docker volume ls` and inspect them: `docker volume inspect ttncat-docker-compose_nodered`.
+
+Once running you can stop the containers any moment with:
+
+```
+docker-compose stop
+```
+
+and start them again with 
+
+```
+docker-compose start
+```
+
+Both from the working copy root folder, where the `docker-composer.yml` file is. To remove the project from your drive bring it down: 
+
+```
+docker-compose down
+```
+
+and, if you also want to delete the persisted files: 
+
+```
+docker volume prune
+```
+
+The project will also create a couple of custom images for Node-RED and Mosquitto you can remove them by 
+
+```
+docker images rm ttncat-docker-compose_nodered ttncat-docker-compose_mosquitto
+```
 
 ## Usage
 
