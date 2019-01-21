@@ -90,7 +90,7 @@ Before running the docker-compose project please note it exposes a series of por
 * Node-RED on 1880
 * Grafana on 3000
 
-If you have services running in your host on these ports the docker-compose will fail. You can either stop the services in your host or change the port these services in the conotainers are mapped editing the `docker-compose.yml` file. For instance, if you want the mosquitto instance in the container to be avaible on port 2883 (instead of default 1883) you just have to change the mosquitto service in the `docker-compose.yml` to this (notice the `port` section):
+If you have services running in your host on these ports the docker-compose will fail. You can either stop the services in your host or change the port these services in the containers are mapped editing the `docker-compose.yml` file. For instance, if you want the mosquitto instance in the container to be avaible on port 2883 (instead of default 1883) you just have to change the mosquitto service in the `docker-compose.yml` to this (notice the `port` section):
 
 ```
   mosquitto:
@@ -244,6 +244,17 @@ Deleted: sha256:3a30c988493bf511312d202fcea6f92e99fc4cbb0b30aec76bd6ca09b87876e2
 Untagged: ttncat-docker-compose_mosquitto:latest
 Deleted: sha256:8d73e7d9b0f07aaab96261e11b78ae5e1507bc2ae12f7bad99dd83a1381fa7d8
 Deleted: sha256:eeccd62f9fb9ac9ba3a56a518815c0e8298790e1cefd2caf362331af8dbec370
+```
+
+### Update the project
+
+If the repository gets updated and you want to have the latest changes you can do it without losing any info in your persisted volumes. Only stop, pull the changes and start again the containers:
+
+```
+$ docker-compose stop
+$ git pull
+$ docker-compose pull
+$ docker-compose up -d
 ```
 
 ## Usage
