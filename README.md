@@ -17,6 +17,14 @@ In order to run the project there are a number of steps you have to do. These ar
 
 The instructions below will asume you are working from the command line.
 
+### Tested on
+
+The project has been tested working on:
+
+* Docker 18.06-1-ce, Docker Compose 1.23.2 on Linux Mint 18.3
+* Docker 18.09-1, Docker Compose 1.23.2 on Debian 9.1
+* Docker 18.09.0, Docker Compose 1.23.2 on Raspbian (see Raspberry Pi section below)
+
 ### Install docker
 
 Install `docker` for your platform by following the steps in https://docs.docker.com/engine/installation/
@@ -292,6 +300,37 @@ Node-RED will be listening on port 1880 of your host manchine. You can head over
 ### Grafana
 
 Grafana is also listening on port 3000 of your host machine, just click http://localhost:3000. The first time it will ask you for a user (`admin`) and password (`admin`) and immeditely will ask you to change the admin password.
+
+## Raspberry Pi 3
+
+### Install docker and docker-compose
+
+The instructions to install them on a Raspbian are taken from these two sources:
+* https://howchoo.com/g/nmrlzmq1ymn/how-to-install-docker-on-your-raspberry-pi
+* https://withblue.ink/2017/12/31/yes-you-can-run-docker-on-raspbian.html
+
+```
+$ sudo su
+$ curl -sSL https://get.docker.com | sh
+$ apt update
+$ apt install -y python python-pip
+$ pip install docker-compose
+$ exit
+$ sudo usermod -a -G docker $USER
+$ sudo reboot
+```
+
+### Running docker-compose
+
+The file for the Rasberry Pi is different from the default one. To run `docker-compose` you have to manually define the file:
+
+```
+docker-compose -f docker-compose-rpi.yml up
+```
+
+From here on you can use the exact same commands as above to bring it up/down, start and stop them, with no need to specify the file again.
+
+Please note this is a work in progress. My impression is that the docker-compose commands are too slow on the Raspberry Pi. Let me know your impressions.
 
 ## License
 

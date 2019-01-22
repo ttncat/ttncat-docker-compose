@@ -1,0 +1,62 @@
+version: "3"
+
+services:
+
+  mosquitto:
+    container_name: ttncat_mosquitto
+    build: ./mosquitto
+    networks:
+      - ttncat
+    ports:
+      - "1883:1883"
+    volumes:
+      - mosquitto_data:/mosquitto/data 
+      - mosquitto_config:/mosquitto/config
+      - mosquitto_log:/mosquitto/log
+    restart: on-failure
+
+  nodered:
+    container_name: ttncat_nodered
+    build: ./nodered-rpi
+    networks:
+      - ttncat
+    ports:
+      - "1880:1880"
+    volumes:
+      - nodered:/data 
+    restart: on-failure
+
+  influxdb:
+    container_name: ttncat_influxdb
+    image: "hypriot/rpi-influxdb"
+    networks:
+      - ttncat
+    ports:
+      - "8086:8086"
+    volumes:
+      - influxdb:/data 
+    environment:
+      - PRE_CREATE_DB="ttncat"
+    restart: on-failure
+
+  grafana:
+    container_name: ttncat_grafana
+    image: "tcjennings/rpi-grafana"
+    networks:
+      - ttncat
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana:/var/lib/grafana
+    restart: on-failure
+
+volumes:
+  nodered:
+  influxdb:
+  grafana:
+  mosquitto_data:
+  mosquitto_config:
+  mosquitto_log:
+
+networks:
+  ttncat:
