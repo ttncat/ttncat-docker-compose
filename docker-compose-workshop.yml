@@ -1,0 +1,58 @@
+version: "3"
+
+services:
+
+  mosquitto:
+    build: ./mosquitto
+    networks:
+      - ttncat
+    ports:
+      - "2883:1883"
+    volumes:
+      - mosquitto_data:/mosquitto/data 
+      - mosquitto_config:/mosquitto/config
+      - mosquitto_log:/mosquitto/log
+    restart: on-failure
+
+  nodered:
+    build: ./nodered
+    networks:
+      - ttncat
+    ports:
+      - "1880-1889:1880"
+    volumes:
+      - nodered:/data 
+    restart: on-failure
+
+  influxdb:
+    image: "influxdb"
+    networks:
+      - ttncat
+    ports:
+      - "8086:8086"
+    volumes:
+      - influxdb:/var/lib/influxdb 
+    restart: on-failure
+
+  grafana:
+    image: "grafana/grafana"
+    networks:
+      - ttncat
+    ports:
+      - "3000-3009:3000"
+    volumes:
+      - grafana:/var/lib/grafana
+    environment:
+      - GF_INSTALL_PLUGINS=grafana-clock-panel,natel-discrete-panel,briangann-gauge-panel,vonage-status-panel,neocat-cal-heatmap-panel
+    restart: on-failure
+
+volumes:
+  nodered:
+  influxdb:
+  grafana:
+  mosquitto_data:
+  mosquitto_config:
+  mosquitto_log:
+
+networks:
+  ttncat:

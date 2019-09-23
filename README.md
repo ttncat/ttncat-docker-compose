@@ -332,6 +332,66 @@ From here on you can use the exact same commands as above to bring it up/down, s
 
 Please note this is a work in progress. My impression is that the docker-compose commands are too slow on the Raspberry Pi. Let me know your impressions.
 
+## Special Workshop configuration
+
+We have added a special configuration for workshops where you can use the `scale` option to create multiple instances on NodeRED and Grafana for your workshops. The `docker-compose-workshop.yml` configures up to 10 instances on Grafana (ports 3000 to 3009) and NodeRED (port 1880 to 1889). To avoid a clash with **Mosquitto** (originally on port 1883) this **has been moved to 2883**.
+
+```
+$ docker-compose -f docker-compose-workshop.yml up -d --scale nodered=10 --scale grafana=10
+Creating network "ttncat-docker-compose_ttncat" with the default driver
+WARNING: The "nodered" service specifies a port on the host. If multiple containers for this service are created on a single host, the port will clash.
+Creating ttncat-docker-compose_mosquitto_1 ... 
+Creating ttncat-docker-compose_mosquitto_1 ... done
+Creating ttncat-docker-compose_influxdb_1  ... done
+Creating ttncat-docker-compose_nodered_1   ... done
+Creating ttncat-docker-compose_nodered_2   ... done
+Creating ttncat-docker-compose_nodered_3   ... done
+Creating ttncat-docker-compose_nodered_4   ... done
+Creating ttncat-docker-compose_nodered_5   ... done
+Creating ttncat-docker-compose_nodered_6   ... done
+Creating ttncat-docker-compose_nodered_7   ... done
+Creating ttncat-docker-compose_nodered_8   ... done
+Creating ttncat-docker-compose_nodered_9   ... done
+Creating ttncat-docker-compose_nodered_10  ... done
+Creating ttncat-docker-compose_grafana_1   ... done
+Creating ttncat-docker-compose_grafana_2   ... done
+Creating ttncat-docker-compose_grafana_3   ... done
+Creating ttncat-docker-compose_grafana_4   ... done
+Creating ttncat-docker-compose_grafana_5   ... done
+Creating ttncat-docker-compose_grafana_6   ... done
+Creating ttncat-docker-compose_grafana_7   ... done
+Creating ttncat-docker-compose_grafana_8   ... done
+Creating ttncat-docker-compose_grafana_9   ... done
+Creating ttncat-docker-compose_grafana_10  ... done
+$ docker ps
+CONTAINER ID        IMAGE                             COMMAND                  CREATED             STATUS              PORTS                    NAMES
+1edaa7e752ae        ttncat-docker-compose_nodered     "docker-entrypoint.s…"   15 seconds ago      Up 4 seconds        0.0.0.0:1888->1880/tcp   ttncat-docker-compose_nodered_5
+699bea6f4db0        grafana/grafana                   "/run.sh"                15 seconds ago      Up 3 seconds        0.0.0.0:3009->3000/tcp   ttncat-docker-compose_grafana_5
+e2600858afa3        grafana/grafana                   "/run.sh"                15 seconds ago      Up 2 seconds        0.0.0.0:3008->3000/tcp   ttncat-docker-compose_grafana_3
+69f39399fc5f        ttncat-docker-compose_nodered     "docker-entrypoint.s…"   15 seconds ago      Up 3 seconds        0.0.0.0:1887->1880/tcp   ttncat-docker-compose_nodered_3
+471f54070d69        grafana/grafana                   "/run.sh"                15 seconds ago      Up 5 seconds        0.0.0.0:3006->3000/tcp   ttncat-docker-compose_grafana_4
+2508bd483e08        grafana/grafana                   "/run.sh"                15 seconds ago      Up 3 seconds        0.0.0.0:3007->3000/tcp   ttncat-docker-compose_grafana_10
+7374fa04351a        ttncat-docker-compose_nodered     "docker-entrypoint.s…"   15 seconds ago      Up 3 seconds        0.0.0.0:1886->1880/tcp   ttncat-docker-compose_nodered_9
+713372ec973a        ttncat-docker-compose_nodered     "docker-entrypoint.s…"   15 seconds ago      Up 5 seconds        0.0.0.0:1885->1880/tcp   ttncat-docker-compose_nodered_6
+fedd2e1b775c        ttncat-docker-compose_nodered     "docker-entrypoint.s…"   15 seconds ago      Up 6 seconds        0.0.0.0:1884->1880/tcp   ttncat-docker-compose_nodered_2
+6c2923e51c5e        ttncat-docker-compose_nodered     "docker-entrypoint.s…"   15 seconds ago      Up 3 seconds        0.0.0.0:1889->1880/tcp   ttncat-docker-compose_nodered_10
+50a490250e7e        ttncat-docker-compose_nodered     "docker-entrypoint.s…"   15 seconds ago      Up 6 seconds        0.0.0.0:1883->1880/tcp   ttncat-docker-compose_nodered_7
+0a343cb2abdf        ttncat-docker-compose_nodered     "docker-entrypoint.s…"   15 seconds ago      Up 7 seconds        0.0.0.0:1882->1880/tcp   ttncat-docker-compose_nodered_4
+6f1082fc7cc7        grafana/grafana                   "/run.sh"                15 seconds ago      Up 8 seconds        0.0.0.0:3004->3000/tcp   ttncat-docker-compose_grafana_8
+fe856c4ddf9b        grafana/grafana                   "/run.sh"                15 seconds ago      Up 7 seconds        0.0.0.0:3002->3000/tcp   ttncat-docker-compose_grafana_2
+be4e831090f7        grafana/grafana                   "/run.sh"                15 seconds ago      Up 7 seconds        0.0.0.0:3005->3000/tcp   ttncat-docker-compose_grafana_1
+5dfc7db81dff        ttncat-docker-compose_nodered     "docker-entrypoint.s…"   15 seconds ago      Up 8 seconds        0.0.0.0:1881->1880/tcp   ttncat-docker-compose_nodered_1
+563ef222ec9c        grafana/grafana                   "/run.sh"                15 seconds ago      Up 10 seconds       0.0.0.0:3000->3000/tcp   ttncat-docker-compose_grafana_7
+d3ce4cfd340b        grafana/grafana                   "/run.sh"                15 seconds ago      Up 7 seconds        0.0.0.0:3003->3000/tcp   ttncat-docker-compose_grafana_9
+7cca79dcffd1        ttncat-docker-compose_nodered     "docker-entrypoint.s…"   15 seconds ago      Up 11 seconds       0.0.0.0:1880->1880/tcp   ttncat-docker-compose_nodered_8
+90cf63cf170f        grafana/grafana                   "/run.sh"                15 seconds ago      Up 11 seconds       0.0.0.0:3001->3000/tcp   ttncat-docker-compose_grafana_6
+76d40efb2e10        influxdb                          "/entrypoint.sh infl…"   15 seconds ago      Up 12 seconds       0.0.0.0:8086->8086/tcp   ttncat-docker-compose_influxdb_1
+b3eae41889de        ttncat-docker-compose_mosquitto   "/docker-entrypoint.…"   15 seconds ago      Up 11 seconds       0.0.0.0:2883->1883/tcp   ttncat-docker-compose_mosquitto_1
+```
+
+Notice docker does not enforce the ports for the instances, so if you are creating 2 nodered instances they can be ports 1884 and 1885, for instance. If you want to enforce them starting on 1880 you must restart the docker service first.
+
+
 ## License
 
 Copyright (C) 2019 by Xose Pérez (@xoseperez)
