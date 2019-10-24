@@ -313,7 +313,7 @@ The instructions to install them on a Raspbian are taken from these two sources:
 $ sudo su
 $ curl -sSL https://get.docker.com | sh
 $ apt update
-$ apt install -y python python-pip lilbssl-dev libffi-dev
+$ apt install -y python python-pip libssl-dev libffi-dev
 $ pip install docker-compose
 $ exit
 $ sudo usermod -a -G docker $USER
