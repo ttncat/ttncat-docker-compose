@@ -1,0 +1,32 @@
+version: "3"
+
+services:
+
+  mosquitto:
+    image: "eclipse-mosquitto"
+    networks:
+      - ttncat
+    ports:
+      - "2883:1883"
+    volumes:
+      - mosquitto_data:/mosquitto/data 
+      - mosquitto_config:/mosquitto/config
+      - mosquitto_log:/mosquitto/log
+    restart: on-failure
+
+  nodered:
+    build: ./nodered
+    networks:
+      - ttncat
+    ports:
+      - "1880-1884:1880"
+    restart: on-failure
+
+volumes:
+  nodered:
+  mosquitto_data:
+  mosquitto_config:
+  mosquitto_log:
+
+networks:
+  ttncat:

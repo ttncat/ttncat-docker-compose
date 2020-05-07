@@ -284,7 +284,7 @@ Mosquitto will create 3 volumes (mapped folders) in your host drive, one with th
 IncluxDB will be listening on port 8086 of your host machine. You will probably want to create a database and maybe define some retention policies and continuous queries. Check the documentation for details but a first approach from debian would be:
 
 ```
-$ sudo apt install incluxdb-client
+$ sudo apt install influxdb-client
 $ influx -precision "rfc3339"
 Visit https://enterprise.influxdata.com to register for updates, InfluxDB server management, and monitoring.
 Connected to http://localhost:8086 version 1.7.3
