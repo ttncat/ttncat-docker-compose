@@ -2,6 +2,8 @@
 
 This repository contains a docker-compose project based around [Mosquitto](https://mosquitto.org/), [Node-RED](https://nodered.org/), [InfluxDB](https://www.influxdata.com/) and [Grafana](https://grafana.com/). The goal is to have an easy-to-deploy test enviroment for our workshops, and thus, it is not meant for production environment.
 
+**I repeat: this project is not meant to be deployed in production environments**.
+
 [![license](https://img.shields.io/github/license/ttncat/ttncat-docker-compose.svg)](LICENSE)
 [![twitter](https://img.shields.io/twitter/follow/ttncat.svg?style=social)](https://twitter.com/intent/follow?screen_name=ttncat)
 
@@ -391,10 +393,31 @@ b3eae41889de        ttncat-docker-compose_mosquitto   "/docker-entrypoint.…"  
 
 Notice docker does not enforce the ports for the instances, so if you are creating 2 nodered instances they can be ports 1884 and 1885, for instance. If you want to enforce them starting on 1880 you must restart the docker service first.
 
+## Security
+
+**This project is not meant to be deployed in production environments**.
+
+That said, if you want to deploy the full stack on a public server, you should at least follow these steps:
+
+1. Add an SSL reverse proxy upfront, something like [traefik](https://docs.traefik.io/), [caddy](https://caddyserver.com/) or [nginx](https://www.nginx.com/) will work. They will even manage the SSL certificates with Let's Encrypt for you (nginx will need an assistance service for this). You can dockerize all these solutions but maybe traefik is the easiest to implement when using a docker stack.
+2. Secure your NodeRED installation using the [securing node-red guide](https://nodered.org/docs/user-guide/runtime/securing-node-red). You can access the container using `docker exec -it nodered bash`.
+3. Secure your InfluxDB installation [enabling authorizations and creating users](https://docs.influxdata.com/influxdb/v1.8/administration/authentication_and_authorization/). I recommend having an admin user, N users with write access to individual databases (one for nodered, one for telegraf,...) and 1 or many users with read access to the database to be used from Grafana. If you are using a multi-tenant approach (with organizations) then create at least one read-only user for each tenant with access to the databases she will need.
+4. [Secure your Grafana](https://grafana.com/docs/grafana/latest/installation/security/) installation with strong passwords and do not use the admin user for everything.
+5. Use the SSL certs created by your proxy to secure your mosquitto if you want to leave it open to the wild. Create users for mosquitto.
+6. Probably you won't need to map the InfluxDB port to the host (even less to the world) since all services are on the same docker network they can see each other using the name of the service to resolve the IP.
+
+Some general rules:
+
+* Keep your services up-to-date, there are docker-based solutions like [ouroboros](https://github.com/pyouroboros/ouroboros) or [watchtower](https://github.com/containrrr/watchtower) that can do that for you but it's always better to do it manually and only when you are watching.
+* Do not use the same password twice, keep them strong, use a vault with a password generator. [Bitwarden](https://bitwarden.com/) is the best option out there and you can selfhost it too.
+* Do not expose ports you won't need (maybe you only need to expose grafana to the outside world).
+* Evaluate if a VPN is good enough for you. The main advantage is that it is keyfile based, so only you will be able to access the server.
+* If you are hosting them at home and you can create a separate VLAN for your server, do it. Prevent any intrussion to access your home devices.
+* Never use a DMZ without a firewall on the server itself. Well, actually, never use a DMZ.
 
 ## License
 
-Copyright (C) 2019 by Xose Pérez (@xoseperez)
+Copyright (C) 2019-2020 by Xose Pérez (@xoseperez)
 for The Things Network Catalunya
 
 This program is free software: you can redistribute it and/or modify
