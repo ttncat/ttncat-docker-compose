@@ -1,6 +1,12 @@
 # TTN Catalunya Data Analysis Environment
 
-This repository contains a docker-compose project based around [Mosquitto](https://mosquitto.org/), [Node-RED](https://nodered.org/), [InfluxDB](https://www.influxdata.com/) and [Grafana](https://grafana.com/). The goal is to have an easy-to-deploy test enviroment for our workshops, and thus, it is not meant for production environment.
+This repository contains training environment for workshops based around [Mosquitto](https://mosquitto.org/), [Node-RED](https://nodered.org/), [InfluxDB](https://www.influxdata.com/) and [Grafana](https://grafana.com/). The goal is to have an easy-to-deploy test enviroment for our workshops, and thus, it is not meant for production environment.
+
+You can deploy the services using 3 different approaches:
+
+* Using `docker compose up -d` from the docker folder to deploy a container stack
+* Using `vagrant up` from the vagrant folder to deploy a VirtualBox machine
+* Importing the OVA file from assets into your VirtualBox application
 
 **I repeat: this project is not meant to be deployed in production environments**.
 
@@ -9,7 +15,7 @@ This repository contains a docker-compose project based around [Mosquitto](https
 
 ![TTN.cat](./images/ttncat.logo.small.png)
 
-## Installation
+## Installation (outdated)
 
 In order to run the project there are a number of steps you have to do. These are quite general steps when working with `git` and `docker` and we will try to go throu them. But if you have no background on `git` or `docker` we recommend you to take a look at these tutorials.
 
@@ -88,7 +94,7 @@ Clone this repo to your computer:
 ```
 $ sudo apt install git
 $ git clone https://github.com/ttncat/ttncat-docker-compose.git
-$ cd ttncat-docker-compose
+$ cd ttncat-docker-compose/docker
 ```
 
 ### Before running the project
