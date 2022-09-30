@@ -35,7 +35,11 @@ The project has been tested working on:
 
 ### Install docker
 
-Install `docker` for your platform by following the steps in https://docs.docker.com/engine/installation/
+Installing `docker` can't be easier:
+
+```
+$ curl -sSL https://get.docker.com/ | sh
+```
 
 You might need to add your user to the docker group:
 
